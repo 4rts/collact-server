@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo
+from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo, CollaboApplication
 
 
 # TODO: 추후 정리 필요
@@ -13,6 +13,11 @@ class ArtistAdmin(admin.ModelAdmin):
 @admin.register(Art)
 class ArtAdmin(admin.ModelAdmin):
     list_display = [f.name for f in Art._meta.fields]
+
+
+@admin.register(CollaboApplication)
+class CollaboApplicationAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in CollaboApplication._meta.fields]
 
 
 @admin.register(Collabo)

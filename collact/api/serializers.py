@@ -1,4 +1,4 @@
-from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo
+from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo, CollaboApplication
 from main.utils.serializers import PrepareModelSerializer
 
 
@@ -9,12 +9,22 @@ class ArtSerializer(PrepareModelSerializer):
         read_only_fields = ('id',)
 
 
+class CollaboApplicationSerializer(PrepareModelSerializer):
+    class Meta:
+        model = CollaboApplication
+        exclude = ()
+        read_only_fields = ('id',)
+
+
 class CollaboSerializer(PrepareModelSerializer):
     class Meta:
         model = Collabo
         fields = ('id', 'main_artist', 'sub_artist', 'status', 'title', 'description',
-                  'start_dt', 'end_dt', 'created_dt', 'likes')
+                  'application', 'start_dt', 'end_dt', 'created_dt', 'likes')
         read_only_fields = ('id',)
+        expandable_fields = {
+            'application': {'serializer': CollaboApplicationSerializer},
+        }
 
 
 class FavoriteArtistSerializer(PrepareModelSerializer):

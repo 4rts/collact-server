@@ -7,8 +7,8 @@ from rest_framework.views import APIView
 from rest_framework_serializer_extensions.views import SerializerExtensionsAPIViewMixin
 
 from api.filters import PrimaryKeyFilter
-from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo
-from api.serializers import ArtistSerializer, ArtSerializer, CollaboSerializer
+from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo, CollaboApplication
+from api.serializers import ArtistSerializer, ArtSerializer, CollaboSerializer, CollaboApplicationSerializer
 
 
 class DefaultViewSet(SerializerExtensionsAPIViewMixin, viewsets.GenericViewSet):
@@ -58,6 +58,19 @@ class ArtViewSet(mixins.ListModelMixin,
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
 
 
+class CollaboApplicationViewSet(mixins.ListModelMixin,
+                                mixins.CreateModelMixin,
+                                mixins.RetrieveModelMixin,
+                                mixins.UpdateModelMixin,
+                                mixins.DestroyModelMixin,
+                                DefaultViewSet):
+    queryset = CollaboApplication.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CollaboApplicationSerializer
+    http_method_names = ['get', 'post', 'patch', 'delete']
+    filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
+
+
 class CollaboFilterSet(filters.FilterSet):
     main_artist = filters.CharFilter(method='main_artist_method')
     artist = filters.CharFilter(method='artist_method')
@@ -86,7 +99,6 @@ class CollaboViewSet(mixins.ListModelMixin,
     permission_classes = (IsAuthenticated,)
     serializer_class = CollaboSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    filterset_class = CollaboFilterSet
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
 
 
@@ -100,7 +112,6 @@ class FavoriteArtistViewSet(mixins.ListModelMixin,
     permission_classes = (IsAuthenticated,)
     serializer_class = CollaboSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    filterset_class = CollaboFilterSet
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
 
 
@@ -114,5 +125,4 @@ class FavoriteCollaboViewSet(mixins.ListModelMixin,
     permission_classes = (IsAuthenticated,)
     serializer_class = CollaboSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
-    filterset_class = CollaboFilterSet
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)

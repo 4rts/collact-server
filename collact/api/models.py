@@ -3,30 +3,15 @@ from django.db.models import Q
 from django_mysql.models import ListCharField
 
 from accounts.models import User
+from api.constants import FIELDS, ALL_FIELDS
 
 
 class Artist(models.Model):
-    FIELD_IMAGE= 'image'
-    FIELD_VIDEO = 'video'
-    FIELD_PROGRAMMING = 'programming'
-    FIELD_MUSIC = 'music'
-    FIELD_PERFORMANCE = 'performance'
-    FIELD_OBJECT = 'object'
-    FIELD_IDEA = 'idea'
-    FIELDS = (
-        (FIELD_IMAGE,'image'),
-        (FIELD_VIDEO, 'video'),
-        (FIELD_PROGRAMMING, 'programming'),
-        (FIELD_MUSIC, 'music'),
-        (FIELD_PERFORMANCE, 'performance'),
-        (FIELD_OBJECT, 'object'),
-        (FIELD_IDEA, 'idea'),
-    )
-
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, related_name='artist', on_delete=models.CASCADE)
     description = models.TextField(null=True)
     url = models.TextField(null=True)
+    color = models.CharField(max_length=20, null=True)
 
     collaboration_types = ListCharField(
         base_field=models.CharField(choices=FIELDS, max_length=20),
@@ -80,6 +65,54 @@ class Art(models.Model):
     created_dt = models.DateTimeField(auto_now_add=True, db_index=True)
 
 
+class CollaboApplication(models.Model):
+    PLACE_SEOUL = 'seoul'
+    PLACE_GYEONGGI = 'gyeonggi'
+    PLACE_GANGWON = 'gangwon'
+    PLACES = (
+        (PLACE_SEOUL, 'seoul'),
+        (PLACE_GYEONGGI, 'gyeonggi'),
+        (PLACE_GANGWON, 'gangwon'),
+    )
+
+    TIME_AM = 'AM'
+    TIME_PM = 'PM'
+    TIMES = (
+        (TIME_AM, 'AM'),
+        (TIME_PM, 'PM'),
+    )
+
+    STYLE_ONLINE = 'online'
+    STYLE_OFFLINE = 'offline'
+    STYLES = (
+        (STYLE_ONLINE, 'online'),
+        (STYLE_OFFLINE, 'offline'),
+    )
+
+    MONEY_LATER = 'later'
+    MONEY_DIVIDE = 'divide'
+    MONEY_PAY = 'pay'
+    MONEYS = (
+        (MONEY_LATER, 'later'),
+        (MONEY_DIVIDE, 'divide'),
+        (MONEY_PAY, 'pay'),
+    )
+
+    id = models.AutoField(primary_key=True)
+    job = models.CharField(choices=ALL_FIELDS, max_length=20, db_index=True, null=True)
+    self_introduction = models.TextField(null=True, blank=True)
+    where = models.CharField(choices=PLACES, max_length=20, db_index=True, null=True)
+    when = models.CharField(choices=TIMES, max_length=20, db_index=True, null=True)
+    style = models.CharField(choices=STYLES, max_length=20, db_index=True, null=True)
+    money = models.CharField(choices=MONEYS, max_length=20, db_index=True, null=True)
+
+    tool = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    plan_start_dt = models.DateTimeField(db_index=True, null=True)
+    plan_end_dt = models.DateTimeField(db_index=True, null=True)
+
+
 class Collabo(models.Model):
     STATUS_WAITING = 'waiting'
     STATUS_WORKING = 'working'
@@ -96,6 +129,7 @@ class Collabo(models.Model):
     status = models.CharField(choices=STATUS_TYPES, max_length=20, db_index=True, default=STATUS_WAITING)
     title = models.CharField(max_length=20, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
+    application = models.OneToOneField(CollaboApplication, on_delete=models.CASCADE, related_name='collabo')
 
     start_dt = models.DateTimeField(db_index=True, null=True)
     end_dt = models.DateTimeField(db_index=True, null=True)
