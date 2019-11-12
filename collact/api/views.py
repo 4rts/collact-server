@@ -1,7 +1,7 @@
 from django.db.models import Q
 from django_filters import rest_framework as filters
 from requests import Response
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework_serializer_extensions.views import SerializerExtensionsAPIViewMixin
@@ -100,6 +100,27 @@ class CollaboViewSet(mixins.ListModelMixin,
     serializer_class = CollaboSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
+
+
+class CollaboRegisterView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        application_serializer = CollaboApplicationSerializer(data=request.data)
+        application_serializer.is_valid(raise_exception=True)
+        application_serializer.save()
+        application_id = application_serializer.data['id']
+        print('application_serializer.data:', application_serializer.data)
+
+        request_dict = request.data
+        request_dict['application'] = application_id
+
+        collabo_serializer = CollaboSerializer(data=request_dict)
+        collabo_serializer.is_valid(raise_exception=True)
+        collabo_serializer.save()
+        print('collabo_serializer.data:', collabo_serializer.data)
+
+        return Response(collabo_serializer().data, status=status.HTTP_201_CREATED)
 
 
 class FavoriteArtistViewSet(mixins.ListModelMixin,
