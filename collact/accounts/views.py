@@ -11,6 +11,7 @@ from rest_framework_jwt.views import RefreshJSONWebToken
 
 from accounts.serializers import UserSerializer, ConfigSerializer
 from accounts.models import User, Config
+from api.views import DefaultViewSet
 
 
 class ConfigViewSet(mixins.ListModelMixin,
@@ -112,3 +113,12 @@ class TokenRefreshView(RefreshJSONWebToken):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
         return response
 
+
+class UserViewSet(mixins.ListModelMixin,
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  DefaultViewSet):
+    queryset = User.objects.all()
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+    http_method_names = ['get', 'patch', 'delete']
