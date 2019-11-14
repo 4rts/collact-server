@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_mysql',
     'django_filters',
     'drf_yasg',
+    'storages',
 
     'accounts',
     'api',
@@ -189,3 +190,12 @@ SITE_ID = 1
 # Cutomed Serializer
 
 REST_AUTH_SERIALIZERS = { 'USER_DETAILS_SERIALIZER':'accounts.serializers.UserSerializer' }
+
+
+# S3 Storage
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+# AWS Access
+
+AWS_STORAGE_BUCKET_NAME = 'collact'

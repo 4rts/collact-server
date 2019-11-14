@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import models
 from django.db.models import Q
 from django_mysql.models import ListCharField
@@ -7,10 +8,14 @@ from api.constants import FIELDS, ALL_FIELDS
 
 
 class Artist(models.Model):
+    def image_upload_path(self, filename):
+        extension = filename.rsplit('.', 1)[-1]
+        return f'backend/uploads/artists/profiles/{timezone.now().isoformat()}.{extension}'
+
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, related_name='artist', on_delete=models.CASCADE)
     description = models.TextField(null=True)
-    url = models.TextField(null=True)
+    profile = models.ImageField(null=True, blank=True, upload_to=image_upload_path)
     color = models.CharField(max_length=20, null=True)
 
     collaboration_types = ListCharField(
@@ -54,12 +59,15 @@ class Artist(models.Model):
 
 
 class Art(models.Model):
+    def image_upload_path(self, filename):
+        extension = filename.rsplit('.', 1)[-1]
+        return f'backend/uploads/arts/files/{timezone.now().isoformat()}.{extension}'
+
     id = models.AutoField(primary_key=True)
     artist = models.ForeignKey(Artist, related_name='arts', on_delete=models.CASCADE)
     title = models.CharField(max_length=30)
     description = models.TextField(null=True)
-    thumbnail_url = models.TextField(null=True)
-    url = models.TextField(null=True)
+    file = models.ImageField(null=True, blank=True, upload_to=image_upload_path)
     color = models.CharField(max_length=10)
 
     created_dt = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -114,6 +122,10 @@ class CollaboApplication(models.Model):
 
 
 class Collabo(models.Model):
+    def image_upload_path(self, filename):
+        extension = filename.rsplit('.', 1)[-1]
+        return f'backend/uploads/collabos/files/{timezone.now().isoformat()}.{extension}'
+
     STATUS_WAITING = 'waiting'
     STATUS_WORKING = 'working'
     STATUS_COMPLETED = 'completed'
@@ -130,6 +142,7 @@ class Collabo(models.Model):
     title = models.CharField(max_length=20, null=True, blank=True)
     description = models.TextField(null=True, blank=True)
     application = models.OneToOneField(CollaboApplication, on_delete=models.CASCADE, related_name='collabo')
+    file = models.ImageField(null=True, blank=True, upload_to=image_upload_path)
 
     start_dt = models.DateTimeField(db_index=True, null=True)
     end_dt = models.DateTimeField(db_index=True, null=True)
