@@ -20,7 +20,7 @@ class CollaboSerializer(PrepareModelSerializer):
     class Meta:
         model = Collabo
         fields = ('id', 'main_artist', 'sub_artist', 'status', 'title', 'description',
-                  'application', 'start_dt', 'end_dt', 'created_dt', 'likes')
+                  'application', 'start_dt', 'end_dt', 'created_dt', 'likes', 'file')
         read_only_fields = ('id',)
         expandable_fields = {
             'application': {'serializer': CollaboApplicationSerializer},
@@ -44,7 +44,7 @@ class FavoriteCollaboSerializer(PrepareModelSerializer):
 class ArtistSerializer(PrepareModelSerializer):
     class Meta:
         model = Artist
-        fields = ('id', 'user', 'description', 'url', 'collaboration_types', 'creation_type',
+        fields = ('id', 'user', 'description', 'profile', 'collaboration_types', 'creation_type',
                   'arts', 'favorite_artists', 'favorite_collabos',
                   'name', 'waiting_collabos', 'working_collabos', 'completed_collabos', 'followers')
         read_only_fields = ('id',)
