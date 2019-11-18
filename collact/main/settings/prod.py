@@ -13,10 +13,10 @@ DATABASES = {
         'OPTIONS': {
             'charset': 'utf8mb4',
         },
-        'NAME': environ.get('COLLACT_DB_NAME', 'collact'),
-        'USER': environ.get('COLLACT_DB_USER', 'root'),
-        'PASSWORD': environ.get('COLLACT_DB_PASSWORD', ''),
-        'HOST': environ.get('COLLACT_DB_HOST', 'localhost'),
+        'NAME': environ.get('COLLACT_DB_NAME', 'jooyon$collact'),
+        'USER': environ.get('COLLACT_DB_USER', 'jooyon'),
+        'PASSWORD': environ.get('COLLACT_DB_PASSWORD', 'rootpassword'),
+        'HOST': environ.get('COLLACT_DB_HOST', 'jooyon.mysql.pythonanywhere-services.com'),
         'PORT': environ.get('COLLACT_DB_PORT', '3306'),
     }
 }
