@@ -97,5 +97,8 @@ ENV/
 
 *.sqlite3
 
+# static files
+collact/main/static/
+
 # Version tracking
 version
