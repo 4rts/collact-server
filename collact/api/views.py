@@ -8,7 +8,8 @@ from rest_framework_serializer_extensions.views import SerializerExtensionsAPIVi
 
 from api.filters import PrimaryKeyFilter
 from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo, CollaboApplication
-from api.serializers import ArtistSerializer, ArtSerializer, CollaboSerializer, CollaboApplicationSerializer
+from api.serializers import ArtistSerializer, ArtSerializer, CollaboSerializer, CollaboApplicationSerializer, \
+    FavoriteArtistSerializer, FavoriteCollaboSerializer
 
 
 class DefaultViewSet(SerializerExtensionsAPIViewMixin, viewsets.GenericViewSet):
@@ -131,7 +132,7 @@ class FavoriteArtistViewSet(mixins.ListModelMixin,
                             DefaultViewSet):
     queryset = FavoriteArtist.objects.all()
     permission_classes = (IsAuthenticated,)
-    serializer_class = CollaboSerializer
+    serializer_class = FavoriteArtistSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
 
@@ -144,6 +145,6 @@ class FavoriteCollaboViewSet(mixins.ListModelMixin,
                              DefaultViewSet):
     queryset = FavoriteCollabo.objects.all()
     permission_classes = (IsAuthenticated,)
-    serializer_class = CollaboSerializer
+    serializer_class = FavoriteCollaboSerializer
     http_method_names = ['get', 'post', 'patch', 'delete']
     filter_backends = (PrimaryKeyFilter, filters.DjangoFilterBackend)
