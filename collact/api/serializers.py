@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from api.models import Artist, Art, Collabo, FavoriteArtist, FavoriteCollabo, CollaboApplication
 from main.utils.serializers import PrepareModelSerializer
 
@@ -16,6 +18,12 @@ class CollaboApplicationSerializer(PrepareModelSerializer):
         read_only_fields = ('id',)
 
 
+class ArtistSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Artist
+        fields = ('id', 'user', 'profile', 'name')
+
+
 class CollaboSerializer(PrepareModelSerializer):
     class Meta:
         model = Collabo
@@ -23,7 +31,8 @@ class CollaboSerializer(PrepareModelSerializer):
                   'application', 'start_dt', 'end_dt', 'created_dt', 'likes', 'file')
         read_only_fields = ('id',)
         expandable_fields = {
-            'application': {'serializer': CollaboApplicationSerializer},
+            'main_artist': {'serializer': ArtistSimpleSerializer},
+            'sub_artist': {'serializer': ArtistSimpleSerializer},
         }
 
 
