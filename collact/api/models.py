@@ -43,15 +43,18 @@ class Artist(models.Model):
 
     @property
     def favorite_artists(self):
-        return FavoriteArtist.objects.filter(who=self)
+        favorite_artists = FavoriteArtist.objects.filter(who=self).values_list('favorite', flat=True)
+        return Artist.objects.filter(id__in=favorite_artists)
 
     @property
     def favorite_collabos(self):
-        return FavoriteCollabo.objects.filter(who=self)
+        favorite_collabos = FavoriteCollabo.objects.filter(who=self).values_list('favorite', flat=True)
+        return Collabo.objects.filter(id__in=favorite_collabos)
 
     @property
     def followers(self):
-        return FavoriteArtist.objects.filter(favorite=self)
+        followers = FavoriteArtist.objects.filter(favorite=self).values_list('who', flat=True)
+        return Artist.objects.filter(id__in=followers)
 
     @property
     def arts(self):
@@ -161,5 +164,5 @@ class FavoriteArtist(models.Model):
 
 class FavoriteCollabo(models.Model):
     id = models.AutoField(primary_key=True)
-    who = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='favorite_collabos')
+    who = models.ForeignKey(Artist, on_delete=models.CASCADE, related_name='+')
     favorite = models.ForeignKey(Collabo, on_delete=models.CASCADE, related_name='+')
