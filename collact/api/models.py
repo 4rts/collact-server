@@ -71,7 +71,7 @@ class Art(models.Model):
     title = models.CharField(max_length=30)
     description = models.TextField(null=True)
     file = models.ImageField(null=True, blank=True, upload_to=image_upload_path)
-    color = models.CharField(max_length=10)
+    color = models.CharField(max_length=10, null=True)
 
     created_dt = models.DateTimeField(auto_now_add=True, db_index=True)
 
